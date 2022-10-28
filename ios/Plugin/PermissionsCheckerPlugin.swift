@@ -15,4 +15,13 @@ public class PermissionsCheckerPlugin: CAPPlugin {
             "value": implementation.echo(value)
         ])
     }
+
+    @objc func query(_ call: CAPPluginCall) {
+        let permission = call.getString("permission") ?? ""
+        var status = permission
+
+        call.resolve([
+            "status": status
+        ])
+    }
 }

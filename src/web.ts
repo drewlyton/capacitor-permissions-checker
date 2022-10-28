@@ -10,4 +10,17 @@ export class PermissionsCheckerWeb
     console.log('ECHO', options);
     return options;
   }
+
+  async query(options: { permission: string }): Promise<{ status: string }> {
+    const navigator = window.navigator;
+
+    if (!navigator.permissions)
+      throw Promise.reject('This browser does not support the Permissions API');
+
+    const status = await navigator.permissions.query({
+      name: options.permission as PermissionName,
+    });
+
+    return { status: status.state };
+  }
 }

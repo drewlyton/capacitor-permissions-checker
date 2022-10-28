@@ -19,4 +19,13 @@ public class PermissionsCheckerPlugin extends Plugin {
         ret.put("value", implementation.echo(value));
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void query(PluginCall call) {
+        String permission = call.getString("permission");
+
+        JSObject ret = new JSObject();
+        ret.put("status", permission);
+        call.resolve(ret);
+    }
 }
