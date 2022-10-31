@@ -10,42 +10,20 @@ import os.log
 public class PermissionsCheckerPlugin: CAPPlugin {
     private let implementation = PermissionsChecker()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
-    }
-
-    private let localNetwork = LocalNetworkAuthorization()
 
     @objc func checkPermission(_ call: CAPPluginCall) {
         os_log("Check Permission Called")
-        
-        func testFunction(x: Bool) {
-            os_log(x)
-            return
-        }
+    }  
 
-        localNetwork.requestAuthorization(completion: testFunction)
-
-
-        let permission = call.getString("permission") ?? ""
-        var status = permission
-        // logic to get local network perm
-        call.resolve([
-            "status": status
-        ])
-    }
+    private let LocalNetwork = LocalNetworkAuthorization()
 
     @objc func requestPermission(_ call: CAPPluginCall) {
         os_log("Request Permission Called")
-        let permission = call.getString("permission") ?? ""
-        var status = permission
-
-        // logic to get local network perm
-        call.resolve([
-            "status": status
-        ])
+        Task {
+            let response = await LocalNetwork.requestAuthorization()
+            call.resolve([
+                "status": response
+            ])
+        }
     }
 }
