@@ -10,7 +10,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:ios": "cd ../ && npm run build && cd example && npx cap sync && npm run build && npx cap copy ios"
   },
   "dependencies": {
     "@capacitor/android": "^4.0.0",
