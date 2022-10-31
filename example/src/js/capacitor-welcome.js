@@ -1,5 +1,6 @@
+/* eslint-disable no-undef */
 import { SplashScreen } from '@capacitor/splash-screen';
-import { Camera } from '@capacitor/camera';
+import { PermissionsChecker } from 'permission-checker';
 
 window.customElements.define(
   'capacitor-welcome',
@@ -80,6 +81,10 @@ window.customElements.define(
         </p>
         <p>
           <button class="button" id="take-photo">Take Photo</button>
+          <button class="button" id="check-perm">Check Perm</button>
+          <button class="button" id="request-perm">Request Perm</button>
+
+
         </p>
         <p>
           <img id="image" style="max-width: 100%">
@@ -92,24 +97,50 @@ window.customElements.define(
     connectedCallback() {
       const self = this;
 
-      self.shadowRoot.querySelector('#take-photo').addEventListener('click', async function (e) {
-        try {
-          const photo = await Camera.getPhoto({
-            resultType: 'uri',
-          });
+      self.shadowRoot
+        .querySelector('#take-photo')
+        .addEventListener('click', async function (e) {
+          try {
+            const status = await PermissionsChecker.query({
+              permission: 'camera',
+            });
 
-          const image = self.shadowRoot.querySelector('#image');
-          if (!image) {
-            return;
+            console.log(status);
+          } catch (e) {
+            console.warn('User cancelled', e);
           }
+        });
 
-          image.src = photo.webPath;
-        } catch (e) {
-          console.warn('User cancelled', e);
-        }
-      });
+      // Example permission code
+      self.shadowRoot
+        .querySelector('#check-perm')
+        .addEventListener('click', async function (e) {
+          try {
+            console.log('check perm did this get called');
+            const status = await PermissionsChecker.checkPermission({
+              permission: 'local-network',
+            });
+            console.log(status);
+          } catch (e) {
+            console.warn('User cancelled', e);
+          }
+        });
+
+      self.shadowRoot
+        .querySelector('#request-perm')
+        .addEventListener('click', async function (e) {
+          try {
+            console.log('req perm did this get called');
+            const status = await PermissionsChecker.requestPermission({
+              permission: 'local-network',
+            });
+            console.log(status)
+          } catch (e) {
+            console.warn('User cancelled', e);
+          }
+        });
     }
-  }
+  },
 );
 
 window.customElements.define(
@@ -138,5 +169,5 @@ window.customElements.define(
     <slot></slot>
     `;
     }
-  }
+  },
 );
