@@ -16,10 +16,21 @@ public class PermissionsCheckerPlugin: CAPPlugin {
         ])
     }
 
-    @objc func query(_ call: CAPPluginCall) {
+    @objc func checkPermission(_ call: CAPPluginCall) {
         let permission = call.getString("permission") ?? ""
         var status = permission
 
+        // logic to get local network perm
+        call.resolve([
+            "status": status
+        ])
+    }
+
+    @objc func requestPermission(_ call: CAPPluginCall) {
+        let permission = call.getString("permission") ?? ""
+        var status = permission
+
+        // logic to get local network perm
         call.resolve([
             "status": status
         ])
