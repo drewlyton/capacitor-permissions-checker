@@ -8,22 +8,32 @@ import os.log
  */
 @objc(PermissionsCheckerPlugin)
 public class PermissionsCheckerPlugin: CAPPlugin {
-    private let implementation = PermissionsChecker()
-
-
-    @objc func checkPermission(_ call: CAPPluginCall) {
-        os_log("Check Permission Called")
-    }  
-
     private let LocalNetwork = LocalNetworkAuthorization()
 
-    @objc func requestPermission(_ call: CAPPluginCall) {
-        os_log("Request Permission Called")
-        Task {
-            let response = await LocalNetwork.requestAuthorization()
+    @objc func checkPermission(_ call: CAPPluginCall) {
+        print("Check Permission Called")
+        func callback(response: Bool) {
+            print("requestPermission callback: \(response)")
+
             call.resolve([
                 "status": response
             ])
+            return
         }
+        LocalNetwork.checkAuthorization(completion: callback) 
+    }
+
+    @objc func requestPermission(_ call: CAPPluginCall) {
+        print("Request Permission Called")
+        func callback(response: Bool) {
+            print("requestPermission callback: \(response)")
+
+            call.resolve([
+                "status": response
+            ])
+            return
+        }
+        LocalNetwork.requestAuthorization(completion: callback)
+      
     }
 }

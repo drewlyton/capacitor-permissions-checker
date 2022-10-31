@@ -1,4 +1,3 @@
-
 import Foundation
 import Network
 
@@ -13,17 +12,10 @@ public class LocalNetworkAuthorization: NSObject {
     private var netService: NetService?
     private var completion: ((Bool) -> Void)?
     
-    public func requestAuthorization() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            requestAuthorization() { result in
-                continuation.resume(returning: result)
-            }
-        }
-    }
     
-    private func requestAuthorization(completion: @escaping (Bool) -> Void) {
+    public func checkAuthorization(completion: @escaping (Bool) -> Void) {
         self.completion = completion
-        
+
             // Create parameters, and allow browsing over peer-to-peer link.
         let parameters = NWParameters()
         parameters.includePeerToPeer = true
@@ -32,18 +24,63 @@ public class LocalNetworkAuthorization: NSObject {
         let browser = NWBrowser(for: .bonjour(type: "_bonjour._tcp", domain: nil), using: parameters)
         self.browser = browser
         browser.stateUpdateHandler = { newState in
+            print("newState: \(newState)")
             switch newState {
-            case .failed(let error):
-                print(error.localizedDescription)
-            case .ready, .cancelled:
-                break
-            case let .waiting(error):
-                print("Local network permission has been denied: \(error)")
-                self.reset()
-                self.completion?(false)
-            default:
-                break
-            }
+                case .failed(let error):
+                    print(".failed: \(error)")
+                    self.completion?(false)
+                case .ready: 
+                    self.completion?(true)
+                    break
+                case .cancelled:
+                    self.completion?(false)
+                    break
+                case let .waiting(error):
+                    print("Local network permission has been denied: \(error)")
+                    self.completion?(false)
+                default:
+                    self.completion?(false)
+                    break
+                }
+        }
+        
+        self.netService = NetService(domain: "local.", type:"_lnp._tcp.", name: "LocalNetworkPrivacy", port: 1100)
+        self.netService?.delegate = self
+        
+        self.browser?.start(queue: .main)
+        self.netService?.publish()
+    }
+    
+    
+    public func requestAuthorization(completion: @escaping (Bool) -> Void) {
+        self.completion = completion
+
+            // Create parameters, and allow browsing over peer-to-peer link.
+        let parameters = NWParameters()
+        parameters.includePeerToPeer = true
+        
+            // Browse for a custom service type.
+        let browser = NWBrowser(for: .bonjour(type: "_bonjour._tcp", domain: nil), using: parameters)
+        self.browser = browser
+        browser.stateUpdateHandler = { newState in
+            print("newState: \(newState)")
+            switch newState {
+                case .failed(let error):
+                    print(".failed: \(error)")
+                    self.completion?(false)
+                case .ready: 
+                    self.completion?(true)
+                    break
+                case .cancelled:
+                    self.completion?(false)
+                    break
+                case let .waiting(error):
+                    print("Local network permission has been denied: \(error)")
+                    self.completion?(false)
+                default:
+                    self.completion?(false)
+                    break
+                }
         }
         
         self.netService = NetService(domain: "local.", type:"_lnp._tcp.", name: "LocalNetworkPrivacy", port: 1100)

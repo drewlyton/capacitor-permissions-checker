@@ -25,8 +25,6 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
-* [`query(...)`](#query)
 * [`requestPermission(...)`](#requestpermission)
 * [`checkPermission(...)`](#checkpermission)
 
@@ -34,36 +32,6 @@ npx cap sync
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### echo(...)
-
-```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
-```
-
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
-
---------------------
-
-
-### query(...)
-
-```typescript
-query(options: { permission: string; }) => Promise<{ status: string; }>
-```
-
-| Param         | Type                                 |
-| ------------- | ------------------------------------ |
-| **`options`** | <code>{ permission: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ status: string; }&gt;</code>
-
---------------------
-
 
 ### requestPermission(...)
 
