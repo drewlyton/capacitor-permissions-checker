@@ -1,14 +1,14 @@
 import Foundation
 import Capacitor
 import os.log
- 
+private let LocalNetwork = LocalNetworkAuthorization()
+
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(PermissionsCheckerPlugin)
 public class PermissionsCheckerPlugin: CAPPlugin {
-    private let LocalNetwork = LocalNetworkAuthorization()
 
     @objc func checkPermission(_ call: CAPPluginCall) {
         print("Check Permission Called")
@@ -35,5 +35,9 @@ public class PermissionsCheckerPlugin: CAPPlugin {
         }
         LocalNetwork.requestAuthorization(completion: callback)
       
+    }
+
+    @objc func openSettings(_ call: CAPPluginCall) {
+        print("Open Settings called")
     }
 }

@@ -25,23 +25,26 @@ public class LocalNetworkAuthorization: NSObject {
         self.browser = browser
         browser.stateUpdateHandler = { newState in
             print("newState: \(newState)")
+            var state = false
             switch newState {
                 case .failed(let error):
                     print(".failed: \(error)")
-                    self.completion?(false)
+                    state = false
                 case .ready: 
-                    self.completion?(true)
+                    state = true
                     break
                 case .cancelled:
-                    self.completion?(false)
+                    state = false
                     break
                 case let .waiting(error):
                     print("Local network permission has been denied: \(error)")
-                    self.completion?(false)
+                    state = false
                 default:
-                    self.completion?(false)
+                    state = false
                     break
                 }
+                self.completion?(state)
+
         }
         
         self.netService = NetService(domain: "local.", type:"_lnp._tcp.", name: "LocalNetworkPrivacy", port: 1100)

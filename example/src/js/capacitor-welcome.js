@@ -83,7 +83,7 @@ window.customElements.define(
           <button class="button" id="take-photo">Take Photo</button>
           <button class="button" id="check-perm">Check Perm</button>
           <button class="button" id="request-perm">Request Perm</button>
-
+          <div>Permission Status<div id="permission-status"></div></div>
 
         </p>
         <p>
@@ -112,6 +112,15 @@ window.customElements.define(
         });
 
       // Example permission code
+
+      PermissionsChecker.checkPermission({
+        permission: 'local-network',
+      }).then(status => {
+        console.log("checkPermission, ", status);
+        self.shadowRoot.querySelector('#permission-status').innerHTML =
+          JSON.stringify(status);
+      });
+
       self.shadowRoot
         .querySelector('#check-perm')
         .addEventListener('click', async function (e) {
@@ -120,7 +129,9 @@ window.customElements.define(
             const status = await PermissionsChecker.checkPermission({
               permission: 'local-network',
             });
-            console.log(status);
+            console.log("chekpermission status", status);
+            self.shadowRoot.querySelector('#permission-status').innerHTML =
+              JSON.stringify(status);
           } catch (e) {
             console.warn('User cancelled', e);
           }
@@ -134,7 +145,9 @@ window.customElements.define(
             const status = await PermissionsChecker.requestPermission({
               permission: 'local-network',
             });
-            console.log(status)
+            console.log("requestpermission status", status);
+            self.shadowRoot.querySelector('#permission-status').innerHTML =
+              JSON.stringify(status);
           } catch (e) {
             console.warn('User cancelled', e);
           }

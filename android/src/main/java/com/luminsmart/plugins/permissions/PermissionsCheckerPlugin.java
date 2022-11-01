@@ -28,4 +28,9 @@ public class PermissionsCheckerPlugin extends Plugin {
         ret.put("status", permission);
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void openSettings(PluginCall call) {
+    //   Open settings
+    }
 }
