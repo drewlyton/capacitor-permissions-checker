@@ -14,6 +14,7 @@ public class LocalNetworkAuthorization: NSObject {
     
     
     public func checkAuthorization(completion: @escaping (Bool) -> Void) {
+        print("checkAuthorization")
         self.completion = completion
 
             // Create parameters, and allow browsing over peer-to-peer link.
@@ -31,6 +32,7 @@ public class LocalNetworkAuthorization: NSObject {
                     print(".failed: \(error)")
                     state = false
                 case .ready: 
+                    print(".ready called")
                     state = true
                     break
                 case .cancelled:

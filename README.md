@@ -27,6 +27,7 @@ npx cap sync
 
 * [`requestPermission(...)`](#requestpermission)
 * [`checkPermission(...)`](#checkpermission)
+* [`openSettings()`](#opensettings)
 
 </docgen-index>
 
@@ -59,6 +60,17 @@ checkPermission(options: { permission: string; }) => Promise<{ status: string; }
 | **`options`** | <code>{ permission: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ status: string; }&gt;</code>
+
+--------------------
+
+
+### openSettings()
+
+```typescript
+openSettings() => Promise<{ success: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ success: string; }&gt;</code>
 
 --------------------
 

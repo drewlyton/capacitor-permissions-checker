@@ -62,25 +62,12 @@ window.customElements.define(
       </capacitor-welcome-titlebar>
       <main>
         <p>
-          Capacitor makes it easy to build powerful apps for the app stores, mobile web (Progressive Web Apps), and desktop, all
-          with a single code base.
-        </p>
-        <h2>Getting Started</h2>
-        <p>
-          You'll probably need a UI framework to build a full-featured app. Might we recommend
-          <a target="_blank" href="http://ionicframework.com/">Ionic</a>?
-        </p>
-        <p>
-          Visit <a href="https://capacitorjs.com">capacitorjs.com</a> for information
-          on using native features, building plugins, and more.
-        </p>
-        <a href="https://capacitorjs.com" target="_blank" class="button">Read more</a>
         <h2>Tiny Demo</h2>
         <p>
-          This demo shows how to call Capacitor plugins. Say cheese!
+          This demo shows how to call Capacitor plugins.
         </p>
         <p>
-          <button class="button" id="take-photo">Take Photo</button>
+          <button class="button" id="open-settings">Open Settings</button>
           <button class="button" id="check-perm">Check Perm</button>
           <button class="button" id="request-perm">Request Perm</button>
           <div>Permission Status<div id="permission-status"></div></div>
@@ -96,31 +83,27 @@ window.customElements.define(
 
     connectedCallback() {
       const self = this;
-
+      // Open Settings
       self.shadowRoot
-        .querySelector('#take-photo')
+        .querySelector('#open-settings')
         .addEventListener('click', async function (e) {
           try {
-            const status = await PermissionsChecker.query({
-              permission: 'camera',
-            });
-
-            console.log(status);
+            PermissionsChecker.openSettings().then(res => console.log(res));
           } catch (e) {
             console.warn('User cancelled', e);
           }
         });
 
-      // Example permission code
+      // Check Permissions
 
       PermissionsChecker.checkPermission({
         permission: 'local-network',
       }).then(status => {
-        console.log("checkPermission, ", status);
         self.shadowRoot.querySelector('#permission-status').innerHTML =
           JSON.stringify(status);
       });
-
+      
+      // click event
       self.shadowRoot
         .querySelector('#check-perm')
         .addEventListener('click', async function (e) {
@@ -129,7 +112,7 @@ window.customElements.define(
             const status = await PermissionsChecker.checkPermission({
               permission: 'local-network',
             });
-            console.log("chekpermission status", status);
+            console.log('chekpermission status', status);
             self.shadowRoot.querySelector('#permission-status').innerHTML =
               JSON.stringify(status);
           } catch (e) {
@@ -137,6 +120,7 @@ window.customElements.define(
           }
         });
 
+      // Request Permissions
       self.shadowRoot
         .querySelector('#request-perm')
         .addEventListener('click', async function (e) {
@@ -145,7 +129,7 @@ window.customElements.define(
             const status = await PermissionsChecker.requestPermission({
               permission: 'local-network',
             });
-            console.log("requestpermission status", status);
+            console.log('requestpermission status', status);
             self.shadowRoot.querySelector('#permission-status').innerHTML =
               JSON.stringify(status);
           } catch (e) {

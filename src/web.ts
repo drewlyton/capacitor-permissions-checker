@@ -32,7 +32,7 @@ export class PermissionsCheckerWeb
     return { status: status.state };
   }
 
-  async openSettings(): Promise<{ status: string }> {
+  async openSettings(): Promise<{ success: string }> {
     throw Promise.reject('This browser does not support the settings API');
   }
 }

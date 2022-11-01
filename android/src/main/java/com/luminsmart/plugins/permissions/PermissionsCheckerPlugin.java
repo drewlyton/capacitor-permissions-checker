@@ -32,6 +32,9 @@ public class PermissionsCheckerPlugin extends Plugin {
     @PluginMethod
     public void openSettings(PluginCall call) {
     //   Open settings
-    
+        JSObject ret = new JSObject();
+        ret.put("success", true);
+        call.resolve(ret);
+
     }
 }
