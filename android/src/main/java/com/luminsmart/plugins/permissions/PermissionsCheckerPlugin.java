@@ -32,5 +32,6 @@ public class PermissionsCheckerPlugin extends Plugin {
     @PluginMethod
     public void openSettings(PluginCall call) {
     //   Open settings
+    
     }
 }
