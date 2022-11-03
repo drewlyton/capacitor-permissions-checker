@@ -12,56 +12,19 @@ public class LocalNetworkAuthorization: NSObject {
   private var netService: NetService?
   private var completion: ((Bool) -> Void)?
 
-  public func checkAuthorization(completion: @escaping (Bool) -> Void) {
-    print("checkAuthorization")
-    self.completion = completion
-    // We need to wrap the .ready in a check because it runs twice
-    var hasBrowserBeenInitialized = false
-    // Create parameters, and allow browsing over peer-to-peer link.
-    let parameters = NWParameters()
-    parameters.includePeerToPeer = true
+  let debouncer = Debouncer(timeInterval: 5)
 
-    // Browse for a custom service type.
-    let browser = NWBrowser(for: .bonjour(type: "_bonjour._tcp", domain: nil), using: parameters)
-    self.browser = browser
-    browser.stateUpdateHandler = { newState in
-      print("newState: \(newState)")
-      switch newState {
-      case .failed(let error):
-        print(".failed: \(error)")
-        self.completion?(false)
-      case .ready:
-        print(".ready called")
-        if hasBrowserBeenInitialized {
-          self.completion?(true)
-          break
-        } else {
-          hasBrowserBeenInitialized = true
-        }
-      case .cancelled:
-        self.completion?(false)
-        break
-      case let .waiting(error):
-        print("Local network permission has been denied: \(error)")
-        self.completion?(false)
-      default:
-        self.completion?(false)
-        break
+  public func requestAuthorization() async -> Bool {
+    return await withCheckedContinuation { continuation in
+      requestAuthorization { result in
+        continuation.resume(returning: result)
       }
     }
-
-    self.netService = NetService(
-      domain: "local.", type: "_lnp._tcp.", name: "LocalNetworkPrivacy", port: 1100)
-    self.netService?.delegate = self
-
-    self.browser?.start(queue: .main)
-    self.netService?.publish()
   }
 
-  public func requestAuthorization(completion: @escaping (Bool) -> Void) {
+  private func requestAuthorization(completion: @escaping (Bool) -> Void) {
     self.completion = completion
-    // We need to wrap the .ready in a check because it runs twice
-    var hasBrowserBeenInitialized = false
+
     // Create parameters, and allow browsing over peer-to-peer link.
     let parameters = NWParameters()
     parameters.includePeerToPeer = true
@@ -70,28 +33,20 @@ public class LocalNetworkAuthorization: NSObject {
     let browser = NWBrowser(for: .bonjour(type: "_bonjour._tcp", domain: nil), using: parameters)
     self.browser = browser
     browser.stateUpdateHandler = { newState in
-      print("newState: \(newState)")
-      switch newState {
-      case .failed(let error):
-        print(".failed: \(error)")
-        self.completion?(false)
-      case .ready:
-        print(".ready called")
-        if hasBrowserBeenInitialized {
-          self.completion?(true)
-          break
-        } else {
-          hasBrowserBeenInitialized = true
-        }
-      case .cancelled:
-        self.completion?(false)
-        break
-      case let .waiting(error):
-        print("Local network permission has been denied: \(error)")
-        self.completion?(false)
-      default:
-        self.completion?(false)
-        break
+      self.debouncer.renewInterval()
+      self.debouncer.handler = {
+        switch newState {
+          case .waiting(let error):
+            print("waiting: \(error)")
+            self.reset()
+            // Local network has been denied event false up
+            self.completion?(false)
+          case .ready:
+            self.completion?(true)
+          default:
+            self.reset()
+            print(newState)
+          }
       }
     }
 
@@ -101,6 +56,7 @@ public class LocalNetworkAuthorization: NSObject {
 
     self.browser?.start(queue: .main)
     self.netService?.publish()
+
   }
 
   private func reset() {
