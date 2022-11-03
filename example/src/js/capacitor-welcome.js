@@ -88,7 +88,6 @@ window.customElements.define(
         .querySelector('#open-settings')
         .addEventListener('click', async function (e) {
           try {
-            console.log('[WEB] openSettings');
             PermissionsChecker.openSettings().then(res => console.log(res));
           } catch (e) {
             console.warn('User cancelled', e);
@@ -96,7 +95,6 @@ window.customElements.define(
         });
 
       // Check Permissions
-      console.log('[WEB] checkPermission');
       PermissionsChecker.checkPermission({
         permission: 'local-network',
       }).then(status => {
@@ -109,7 +107,6 @@ window.customElements.define(
         .querySelector('#check-perm')
         .addEventListener('click', async function (e) {
           try {
-            console.log('[WEB] checkPermission');
             const status = await PermissionsChecker.checkPermission({
               permission: 'local-network',
             });
@@ -126,7 +123,6 @@ window.customElements.define(
         .querySelector('#request-perm')
         .addEventListener('click', async function (e) {
           try {
-            console.log('[WEB] requestPermission');
             const status = await PermissionsChecker.requestPermission({
               permission: 'local-network',
             });

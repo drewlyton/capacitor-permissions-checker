@@ -9,30 +9,26 @@ import os.log
 public class PermissionsCheckerPlugin: CAPPlugin {
 
   @objc func checkPermission(_ call: CAPPluginCall) {
-    print("CheckPermission() Called")
     Task {
       let LocalNetwork = LocalNetworkAuthorization()
       let callback = await LocalNetwork.requestAuthorization() 
       call.resolve([
-        "status": callback
+        "status": callback ? "granted": "denied"
       ])
     }
 
   }
 
   @objc func requestPermission(_ call: CAPPluginCall) {
-    print("RequestPermission() Called")
     Task {
       let LocalNetwork = LocalNetworkAuthorization()
       let callback = await LocalNetwork.requestAuthorization() 
       call.resolve([
-        "status": callback
+        "status": callback ? "granted": "denied"
       ])
-    }
   }
 
   @objc func openSettings(_ call: CAPPluginCall) {
-    print("Open Settings called")
     DispatchQueue.main.async(execute: {
       if let url = URL.init(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
