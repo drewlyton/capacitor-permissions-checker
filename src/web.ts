@@ -6,7 +6,7 @@ export class PermissionsCheckerWeb
   extends WebPlugin
   implements PermissionsCheckerPlugin
 {
-  async checkPermission(options: { permission: string }): Promise<{ status: string }> {
+  async checkPermission(options: { permission: string }): Promise<{ 'local-network': string }> {
     const navigator = window.navigator;
 
     if (!navigator.permissions)
@@ -16,10 +16,10 @@ export class PermissionsCheckerWeb
       name: options.permission as PermissionName,
     });
 
-    return { status: status.state };
+    return { 'local-network': status.state };
   }
 
-  async requestPermission(options: { permission: string }): Promise<{ status: string }> {
+  async requestPermission(options: { permission: string }): Promise<{ 'local-network': string }> {
     const navigator = window.navigator;
 
     if (!navigator.permissions)
@@ -29,7 +29,7 @@ export class PermissionsCheckerWeb
       name: options.permission as PermissionName,
     });
 
-    return { status: status.state };
+    return { 'local-network': status.state };
   }
 
   async openSettings(): Promise<{ success: string }> {

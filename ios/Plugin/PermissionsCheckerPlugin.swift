@@ -13,7 +13,7 @@ public class PermissionsCheckerPlugin: CAPPlugin {
       let LocalNetwork = LocalNetworkAuthorization()
       let callback = await LocalNetwork.requestAuthorization() 
       call.resolve([
-        "status": callback ? "granted": "denied"
+        "local-network": callback ? "granted": "denied"
       ])
     }
 
@@ -24,7 +24,7 @@ public class PermissionsCheckerPlugin: CAPPlugin {
       let LocalNetwork = LocalNetworkAuthorization()
       let callback = await LocalNetwork.requestAuthorization() 
       call.resolve([
-        "status": callback ? "granted": "denied"
+        "local-network": callback ? "granted": "denied"
       ])
   }
 

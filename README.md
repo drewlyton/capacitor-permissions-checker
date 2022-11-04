@@ -37,14 +37,14 @@ npx cap sync
 ### requestPermission(...)
 
 ```typescript
-requestPermission(options: { permission: string; }) => Promise<{ status: string; }>
+requestPermission(options: { permission: string; }) => Promise<{ 'local-network': string; }>
 ```
 
 | Param         | Type                                 |
 | ------------- | ------------------------------------ |
 | **`options`** | <code>{ permission: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ status: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ local-network: string; }&gt;</code>
 
 --------------------
 
@@ -52,14 +52,14 @@ requestPermission(options: { permission: string; }) => Promise<{ status: string;
 ### checkPermission(...)
 
 ```typescript
-checkPermission(options: { permission: string; }) => Promise<{ status: string; }>
+checkPermission(options: { permission: string; }) => Promise<{ 'local-network': string; }>
 ```
 
 | Param         | Type                                 |
 | ------------- | ------------------------------------ |
 | **`options`** | <code>{ permission: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ status: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ local-network: string; }&gt;</code>
 
 --------------------
 
