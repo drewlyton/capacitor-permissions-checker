@@ -1,27 +1,45 @@
-import Foundation
 import Capacitor
+import Foundation
+import os.log
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
+
+/// Please read the Capacitor iOS Plugin Development Guide
+/// here: https://capacitorjs.com/docs/plugins/ios
 @objc(PermissionsCheckerPlugin)
 public class PermissionsCheckerPlugin: CAPPlugin {
-    private let implementation = PermissionsChecker()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+  @objc func checkPermission(_ call: CAPPluginCall) {
+    Task {
+      let LocalNetwork = LocalNetworkAuthorization()
+      let callback = await LocalNetwork.requestAuthorization() 
+      call.resolve([
+        "local-network": callback ? "granted": "denied"
+      ])
     }
 
-    @objc func query(_ call: CAPPluginCall) {
-        let permission = call.getString("permission") ?? ""
-        var status = permission
+  }
 
-        call.resolve([
-            "status": status
-        ])
-    }
+  @objc func requestPermission(_ call: CAPPluginCall) {
+    Task {
+      let LocalNetwork = LocalNetworkAuthorization()
+      let callback = await LocalNetwork.requestAuthorization() 
+      call.resolve([
+        "local-network": callback ? "granted": "denied"
+      ])
+  }
+
+  @objc func openSettings(_ call: CAPPluginCall) {
+    DispatchQueue.main.async(execute: {
+      if let url = URL.init(string: UIApplication.openSettingsURLString) {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+          call.resolve([
+              "success": true
+          ])
+      } else {
+          call.resolve([
+              "success": false
+          ])
+      }
+    })
+  }
 }

@@ -9,28 +9,68 @@ npm install permission-checker
 npx cap sync
 ```
 
+## Development
+
+```bash 
+npm install
+npm run build
+
+cd example 
+npm run build
+npm install 
+npx cap sync
+```
+
 ## API
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`requestPermission(...)`](#requestpermission)
+* [`checkPermission(...)`](#checkpermission)
+* [`openSettings()`](#opensettings)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### requestPermission(...)
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+requestPermission(options: { permission: string; }) => Promise<{ 'local-network': string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+| Param         | Type                                 |
+| ------------- | ------------------------------------ |
+| **`options`** | <code>{ permission: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ local-network: string; }&gt;</code>
+
+--------------------
+
+
+### checkPermission(...)
+
+```typescript
+checkPermission(options: { permission: string; }) => Promise<{ 'local-network': string; }>
+```
+
+| Param         | Type                                 |
+| ------------- | ------------------------------------ |
+| **`options`** | <code>{ permission: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ local-network: string; }&gt;</code>
+
+--------------------
+
+
+### openSettings()
+
+```typescript
+openSettings() => Promise<{ success: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ success: string; }&gt;</code>
 
 --------------------
 

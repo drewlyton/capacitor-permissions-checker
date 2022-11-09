@@ -12,20 +12,29 @@ public class PermissionsCheckerPlugin extends Plugin {
     private PermissionsChecker implementation = new PermissionsChecker();
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
-    }
-
-    @PluginMethod
-    public void query(PluginCall call) {
+    public void checkPermission(PluginCall call) {
         String permission = call.getString("permission");
 
         JSObject ret = new JSObject();
         ret.put("status", permission);
         call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void requestPermission(PluginCall call) {
+        String permission = call.getString("permission");
+
+        JSObject ret = new JSObject();
+        ret.put("status", permission);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void openSettings(PluginCall call) {
+    //   Open settings
+        JSObject ret = new JSObject();
+        ret.put("success", true);
+        call.resolve(ret);
+
     }
 }

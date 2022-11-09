@@ -6,12 +6,7 @@ export class PermissionsCheckerWeb
   extends WebPlugin
   implements PermissionsCheckerPlugin
 {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
-  }
-
-  async query(options: { permission: string }): Promise<{ status: string }> {
+  async checkPermission(options: { permission: string }): Promise<{ 'local-network': string }> {
     const navigator = window.navigator;
 
     if (!navigator.permissions)
@@ -21,6 +16,23 @@ export class PermissionsCheckerWeb
       name: options.permission as PermissionName,
     });
 
-    return { status: status.state };
+    return { 'local-network': status.state };
+  }
+
+  async requestPermission(options: { permission: string }): Promise<{ 'local-network': string }> {
+    const navigator = window.navigator;
+
+    if (!navigator.permissions)
+      throw Promise.reject('This browser does not support the Permissions API');
+
+    const status = await navigator.permissions.query({
+      name: options.permission as PermissionName,
+    });
+
+    return { 'local-network': status.state };
+  }
+
+  async openSettings(): Promise<{ success: string }> {
+    throw Promise.reject('This browser does not support the settings API');
   }
 }
